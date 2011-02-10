@@ -1,0 +1,10 @@
+{
+
+	"name": "Pronounce",
+	"description": "Pronounces the selected text when you click on the context
+	 				menu item",
+	"version": "0.1",
+	"permissions": ["contextMenus"],
+	"background_page": "background_page.html"
+
+}

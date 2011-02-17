@@ -1,8 +1,7 @@
 {
 	"name": "Pronounce",
-	"description": "Pronounces the selected text when you click on the context
-	 				menu item",
-	"version": "0.1",
+	"description": "Select text, right click and choose Pronounce to get a near natural pronounciation.",
+	"version": "0.2",
 	"icons": {
 		"16": "menu-icon-16.png",
 		"48": "menu-icon-48.png",

@@ -75,16 +75,18 @@ $(document).ready(function() {
 	// If preference changes, update local storage and
 	// flash a message
 	$('input[name="show_intl"]').click(function() {
-		localStorage['show_intl'] = $(this).val();
-		if(localStorage['show_intl'] == 'no') {
-			chrome.contextMenus.remove(pronounce_foreign_id);
-		} else if(localStorage['show_intl'] == 'yes') {
-			pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
-										"contexts":["selection"],
-										"onclick": pronounceForeignSelection});
+		if(localStorage['show_intl'] != $(this).val()) {
+			localStorage['show_intl'] = $(this).val()
+			if(localStorage['show_intl'] == 'no') {
+				chrome.contextMenus.remove(pronounce_foreign_id);
+			} else if(localStorage['show_intl'] == 'yes') {
+				pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
+											"contexts":["selection"],
+											"onclick": pronounceForeignSelection});
+			}
+			$('div#notice').html("Preferences updated.").fadeIn(500, function() {
+				setTimeout($('div#notice').fadeOut(1000), 2000);
+			});
 		}
-		$('div#notice').html("Preferences updated.").fadeIn(500, function() {
-			setTimeout($('div#notice').fadeOut(1000), 2000);
-		});
 	});
 });

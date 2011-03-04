@@ -56,10 +56,9 @@
 				// Check the appropriate radio box based on value in local
 				// storage
 				if(localStorage['show_intl'] == null) {
-					localStorage['show_intl'] = "No";
+					localStorage['show_intl'] = "no";
 				}
-				
-				
+				$('input#show_intl_' + localStorage['show_intl']).attr('checked', 'checked');
 				
 				// If preference changes, update local storage and
 				// flash a message
@@ -82,10 +81,10 @@
 				&nbsp;
 			</div>
 			<div id="yes_option" class="radio_button">
-				<input type="radio" name="show_intl" value="Yes" id="show_intl_yes"/> Yes
+				<input type="radio" name="show_intl" value="yes" id="show_intl_yes"/> Yes
 			</div>
 			<div id="no_option" class="radio_button">
-				<input type="radio" name="show_intl" value="No" id="show_intl_no" checked="checked"/> No
+				<input type="radio" name="show_intl" value="no" id="show_intl_no"/> No
 			</div>
 			<div class="spacer">
 				&nbsp;

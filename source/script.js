@@ -14,7 +14,18 @@
 */
 
 function pronounceSelection(info, tab) {
+	var text = info.selectionText;
+	var base_url = 
+		"http://translate.google.com/translate_tts?";
+	var url = base_url + 
+				"q=" + encodeURIComponent(text) + 
+				"&tl=" + 'en';
+	var audio_embed = 
+		"<embed src='"+url+"' hidden=true autostart=true loop=false>";
+	$('#audioHolder').html(audio_embed);
+}
 
+function pronounceForeignSelection(info, tab) {
 	var text = info.selectionText;
 	base_url_for_detection =
 	"https://ajax.googleapis.com/ajax/services/language/detect";
@@ -31,10 +42,6 @@ function pronounceSelection(info, tab) {
 			"<embed src='"+url+"' hidden=true autostart=true loop=false>";
 		$('#audioHolder').html(audio_embed);
 	});
-}
-
-function pronounceForeignSelection(info, tab) {
-	// Implement language detection and call pronounce URL
 }
 
 // Create a new selection context menu

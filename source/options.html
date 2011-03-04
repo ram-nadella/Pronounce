@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<script src="jquery-1.5.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="script.js" type="text/javascript" charset="utf-8"></script>
 		<style type="text/css" media="screen">
 			body {
 				background-color:#fff;
@@ -22,7 +23,7 @@
 			div#notice {
 				text-align:center;
 				font-weight:bold;
-				display:none;
+				min-height:20px;
 			}
 			div#options {
 				margin-bottom:20px;
@@ -51,30 +52,11 @@
 				font-size:11px;
 			}
 		</style>
-		<script type="text/javascript" charset="utf-8">
-			$(document).ready(function() {
-				// Check the appropriate radio box based on value in local
-				// storage
-				if(localStorage['show_intl'] == null) {
-					localStorage['show_intl'] = "no";
-				}
-				$('input#show_intl_' + localStorage['show_intl']).attr('checked', 'checked');
-				
-				// If preference changes, update local storage and
-				// flash a message
-				$('input[name="show_intl"]').click(function() {
-					localStorage['show_intl'] = $(this).val();
-					$('div#notice').fadeIn(500, function() {
-						setTimeout($('div#notice').fadeOut(1000), 3000);
-					});
-				});
-			});
-		</script>
 	</head>
 	<body id="options_page">
 		<h2>Pronounce Foreign Language Text</h2>
 		<div id="notice">
-			Preferences updated.
+			
 		</div>
 		<div id="options">
 			<div class="spacer">

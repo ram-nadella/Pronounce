@@ -50,8 +50,6 @@ function pronounceForeignSelection(info, tab) {
 	});
 }
 
-var pronounce_foreign_id;
-
 function create_pronounce_context_menu() {
 	// Create a new selection context menu
 	chrome.contextMenus.create({"title": "Pronounce", 
@@ -63,10 +61,9 @@ var pronounce_foreign_menu_id;
 
 function create_pronounce_foreign_context_menu() {
 	// create a pronounce foreign context menu
-	var pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
+	pronounce_foreign_menu_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
 								"contexts":["selection"],
 								"onclick": pronounceForeignSelection});
-	return pronounce_foreign_id;
 }
 
 function remove_pronounce_foreign_context_menu() {
@@ -105,7 +102,7 @@ $('body#background_page').ready(function() {
 	// If option enabled, create a pronounce foreign context menu
 	// and assign the menu id to a variable							
 	if(localStorage['show_intl'] == "yes") {
-		pronounce_foreign_menu_id = create_pronounce_foreign_context_menu();
+		create_pronounce_foreign_context_menu();
 	}
 	
 });

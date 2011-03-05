@@ -6,11 +6,9 @@
 
 
 /*
-	Once the user selects text and clicks on the context menu item, control
-	will be passed to this function. Use the selection text to detect the
-	language and pass that language as a parameter to the next request to 
-	get the right audio file and create an <embed> tag and push it to the
-	background html file
+	Once the user selects text and clicks on the pronounce context menu item, control
+	will be passed to this function. Create an <embed> tag and push it to the
+	background html file. Language parameter defaults to english.
 */
 
 function pronounceSelection(info, tab) {
@@ -24,6 +22,14 @@ function pronounceSelection(info, tab) {
 		"<embed src='"+url+"' hidden=true autostart=true loop=false>";
 	$('#audioHolder').html(audio_embed);
 }
+
+/*
+	Once the user selects text and clicks on the pronounce foregin context menu item, 
+	control will be passed to this function. Use the selection text to detect the
+	language and pass that language as a parameter to the next request to 
+	get the right audio file and create an <embed> tag and push it to the
+	background html file
+*/
 
 function pronounceForeignSelection(info, tab) {
 	var text = info.selectionText;
@@ -44,29 +50,41 @@ function pronounceForeignSelection(info, tab) {
 	});
 }
 
-// Create a new selection context menu
+var pronounce_foreign_id;
 
-chrome.contextMenus.create({"title": "Pronounce", 
-							"contexts":["selection"],
-							"onclick": pronounceSelection});
+/*
+	Once the background page loads(on browser launch), create the 
+	context menu items
+*/
+
+$('body#background_page').ready(function() {
 	
-var pronounce_foreign_id;							
-if(localStorage['show_intl'] == "yes") {
-	pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
+	// Create a new selection context menu
+
+	chrome.contextMenus.create({"title": "Pronounce", 
 								"contexts":["selection"],
-								"onclick": pronounceForeignSelection});
-}
+								"onclick": pronounceSelection});
 
-$(document).ready(function() {
+	// If option enabled, create a pronounce foreign context menu
+	// and assign the menu id to a variable							
+	if(localStorage['show_intl'] == "yes") {
+		pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
+									"contexts":["selection"],
+									"onclick": pronounceForeignSelection});
+	}
 	
+});
+
+/*
+	JS code for options page
+	Handling preference changes and add/remove foreign 
+	context menu item based on preference
+*/
+
+$('body#options_page').ready(function() {
 	
-	/*
-		Process stuff on options page
-	*/
-	
-	
-	// Check the appropriate radio box based on value in local
-	// storage
+	// Check the appropriate radio box based on value 
+	// in local storage
 	if(localStorage['show_intl'] == null) {
 		localStorage['show_intl'] = "no";
 	}
@@ -75,6 +93,8 @@ $(document).ready(function() {
 	// If preference changes, update local storage and
 	// flash a message
 	$('input[name="show_intl"]').click(function() {
+		// Execute only if preference has changed, ignore if clicked on the 
+		// existing preference
 		if(localStorage['show_intl'] != $(this).val()) {
 			localStorage['show_intl'] = $(this).val()
 			if(localStorage['show_intl'] == 'no') {
@@ -84,9 +104,7 @@ $(document).ready(function() {
 											"contexts":["selection"],
 											"onclick": pronounceForeignSelection});
 			}
-			$('div#notice').html("Preferences updated.").fadeIn(500, function() {
-				setTimeout($('div#notice').fadeOut(1000), 2000);
-			});
+			$('div#notice').html("Preference updated.").fadeIn(500);
 		}
 	});
 });

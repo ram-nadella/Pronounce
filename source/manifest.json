@@ -1,13 +1,13 @@
 {
 	"name": "Pronounce",
-	"description": "Select text, right click and choose Pronounce to get a near natural pronounciation.",
-	"version": "0.2",
+	"description": "Select text, right click and choose the Pronounce item to hear how the text is pronounced. To use with non-english text, enable the foreign language pronounciation menu item from the options page.",
+	"version": "0.3",
 	"icons": {
 		"16": "menu-icon-16.png",
 		"48": "menu-icon-48.png",
 		"128": "menu-icon-128.png"
 	},
-	"permissions": ["contextMenus"],
+	"permissions": ["contextMenus", "http://*/*", "https://*/*"],
 	"background_page": "background.html",
 	"options_page": "options.html"
 }

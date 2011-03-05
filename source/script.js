@@ -52,6 +52,47 @@ function pronounceForeignSelection(info, tab) {
 
 var pronounce_foreign_id;
 
+function create_pronounce_context_menu() {
+	// Create a new selection context menu
+	chrome.contextMenus.create({"title": "Pronounce", 
+								"contexts":["selection"],
+								"onclick": pronounceSelection});
+}
+
+var pronounce_foreign_menu_id;
+
+function create_pronounce_foreign_context_menu() {
+	// create a pronounce foreign context menu
+	var pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
+								"contexts":["selection"],
+								"onclick": pronounceForeignSelection});
+	return pronounce_foreign_id;
+}
+
+function remove_pronounce_foreign_context_menu() {
+	chrome.contextMenus.remove(pronounce_foreign_menu_id);
+}
+
+/*
+	Using message passing to create/remove context menu items
+	when called from outside the context of the extension (eg. options page)
+	Note: A response(sendResponse) is required to finish the message call and initiate clean up
+*/
+
+chrome.extension.onRequest.addListener(
+	function(request, sender, sendResponse) {
+		if (request.execute == "remove_pronounce_foreign_context_menu") {
+			remove_pronounce_foreign_context_menu();
+			sendResponse({});
+		} else if (request.execute == "create_pronounce_foreign_context_menu") {
+			create_pronounce_foreign_context_menu();
+			sendResponse({});
+		} else {
+			sendResponse({}); // snub them.
+		}
+});
+
+
 /*
 	Once the background page loads(on browser launch), create the 
 	context menu items
@@ -59,52 +100,12 @@ var pronounce_foreign_id;
 
 $('body#background_page').ready(function() {
 	
-	// Create a new selection context menu
-
-	chrome.contextMenus.create({"title": "Pronounce", 
-								"contexts":["selection"],
-								"onclick": pronounceSelection});
+	create_pronounce_context_menu();
 
 	// If option enabled, create a pronounce foreign context menu
 	// and assign the menu id to a variable							
 	if(localStorage['show_intl'] == "yes") {
-		pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
-									"contexts":["selection"],
-									"onclick": pronounceForeignSelection});
+		pronounce_foreign_menu_id = create_pronounce_foreign_context_menu();
 	}
 	
-});
-
-/*
-	JS code for options page
-	Handling preference changes and add/remove foreign 
-	context menu item based on preference
-*/
-
-$('body#options_page').ready(function() {
-	
-	// Check the appropriate radio box based on value 
-	// in local storage
-	if(localStorage['show_intl'] == null) {
-		localStorage['show_intl'] = "no";
-	}
-	$('input#show_intl_' + localStorage['show_intl']).attr('checked', 'checked');
-	
-	// If preference changes, update local storage and
-	// flash a message
-	$('input[name="show_intl"]').click(function() {
-		// Execute only if preference has changed, ignore if clicked on the 
-		// existing preference
-		if(localStorage['show_intl'] != $(this).val()) {
-			localStorage['show_intl'] = $(this).val()
-			if(localStorage['show_intl'] == 'no') {
-				chrome.contextMenus.remove(pronounce_foreign_id);
-			} else if(localStorage['show_intl'] == 'yes') {
-				pronounce_foreign_id = chrome.contextMenus.create({"title": "Pronounce Foreign", 
-											"contexts":["selection"],
-											"onclick": pronounceForeignSelection});
-			}
-			$('div#notice').html("Preference updated.").fadeIn(500);
-		}
-	});
 });

@@ -2,7 +2,6 @@
 <html>
 	<head>
 		<script src="jquery-1.5.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="script.js" type="text/javascript" charset="utf-8"></script>
 		<style type="text/css" media="screen">
 			body {
 				background-color:#fff;
@@ -52,6 +51,46 @@
 				font-size:11px;
 			}
 		</style>
+		<script type="text/javascript" charset="utf-8">
+			/*
+				JS code for options page
+				Handling preference changes and add/remove foreign 
+				context menu item based on preference
+			*/
+
+			$(document).ready(function() {
+
+				// Check the appropriate radio box based on value 
+				// in local storage
+				if(localStorage['show_intl'] == null) {
+					localStorage['show_intl'] = "no";
+				}
+				$('input#show_intl_' + localStorage['show_intl']).attr('checked', 'checked');
+
+				// If preference changes, update local storage and
+				// flash a message
+				
+				/*
+					Using message passing for context menu creation
+					See bug#51436
+					http://code.google.com/p/chromium/issues/detail?id=51436
+				*/
+				
+				$('input[name="show_intl"]').click(function() {
+					// Execute only if preference has changed, ignore if clicked on the 
+					// existing preference
+					if(localStorage['show_intl'] != $(this).val()) {
+						localStorage['show_intl'] = $(this).val()
+						if(localStorage['show_intl'] == 'no') {
+							chrome.extension.sendRequest({execute: "remove_pronounce_foreign_context_menu"});
+						} else if(localStorage['show_intl'] == 'yes') {
+							chrome.extension.sendRequest({execute: "create_pronounce_foreign_context_menu"});
+						}
+						$('div#notice').html("Preference updated.").fadeIn(500);
+					}
+				});
+			});
+		</script>
 	</head>
 	<body id="options_page">
 		<h2>Pronounce Foreign Language Text</h2>

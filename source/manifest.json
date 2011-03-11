@@ -1,6 +1,6 @@
 {
 	"name": "Pronounce",
-	"description": "Hear how a word/phrase is pronounced using the pronounce context menu item. Enalbe non-english pronounciations in the options page",
+	"description": "Hear how a word/phrase is pronounced using the pronounce context menu item. Enable non-english pronounciations from the options page",
 	"version": "0.3.1",
 	"icons": {
 		"16": "menu-icon-16.png",
